@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+<title>API documentation &mdash; exoplanet 0.3.1 documentation</title>
+  
+
+<link rel="shortcut icon" href="../../_static/logo.png"/><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono"><link rel="stylesheet" href="../../_static/typlog.css?v=0.7.3" type="text/css" />
+  <link rel="stylesheet" href="../../_static/theme.css?v=0.7.3" type="text/css" /><link rel="stylesheet" href="../../_static/css/exoplanet.css?v=2020-01-15" type="text/css" />
+      <link rel="index" title="Index" href="../../genindex/"/>
+      <link rel="search" title="Search" href="../../search/"/>
+    <link rel="top" title="exoplanet 0.3.1 documentation" href="../../"/>
+      <link rel="next" title="Developer documentation" href="../dev/"/>
+      <link rel="prev" title="Citing exoplanet &amp; its dependencies" href="../../tutorials/citation/"/>
+  <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create', '');ga('send', 'pageview');</script>
+  <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="exoplanet">
+  <meta property="og:title" content="API documentation">
+  <meta name="twitter:card" content="summary">
+<script src="https://kit.fontawesome.com/12d959964a.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/mustache@latest"></script>
+<script>
+    $.ajax({
+        dataType: "json",
+        url: "https://raw.githubusercontent.com/exoplanet-dev/exoplanet/gh-pages/versions.json",
+        success: function (data) {
+            var versions = Object.keys(data).sort();
+            $(function render() {
+                var template = document.getElementById('versions-template').innerHTML;
+                var rendered = Mustache.render(template, { versions: versions });
+                document.body.innerHTML += rendered;
+                $(".current-version").click(function () {
+                    $(".versions-dropdown").toggle();
+                });
+            });
+        }
+    });
+</script>
+
+</head>
+<body role="document" data-page="user/api">
+  <header class="t-head">
+    <div class="t-head_menu"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M64 384h384v-42.666H64V384zm0-106.666h384v-42.667H64v42.667zM64 128v42.665h384V128H64z"/></svg></div>
+    <a class="t-head_logo" href="../../"><img src="../../_static/logo.png" alt="Logo"/>exoplanet
+    </a>
+  </header>
+  <aside class="t-sidebar">
+    <div class="t-sidebar_close">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M405 136.798L375.202 107 256 226.202 136.798 107 107 136.798 226.202 256 107 375.202 136.798 405 256 285.798 375.202 405 405 375.202 285.798 256z"/></svg>
+    </div>
+    <div class="inner">
+<a class="logo" href="../../"><img src="../../_static/logo.png" alt="Logo"/>
+    exoplanet
+</a><div class="globaltoc">
+<p class="caption"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/citation/">Citing exoplanet &amp; its dependencies</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#orbits">Orbits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#light-curve-models">Light curve models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scalable-gaussian-processes">Scalable Gaussian processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#estimators">Estimators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distributions">Distributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#base-distributions">Base distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#physical-distributions">Physical distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eccentricity-distributions">Eccentricity distributions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#units">Units</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citations">Citations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/">Developer documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/intro-to-pymc3/">A quick intro to PyMC3 for exoplaneteers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/pymc3-extras/">PyMC3 extras</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/rv/">Radial velocity fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/transit/">Transit fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/astrometric/">Astrometric fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/gp/">Scalable Gaussian processes in PyMC3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/light-delay/">Light travel time delay</a></li>
+</ul>
+
+</div><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../">Documentation overview</a><ul>
+      <li>Previous: <a href="../../tutorials/citation/" title="previous chapter">Citing exoplanet &amp; its dependencies</a></li>
+      <li>Next: <a href="../dev/" title="next chapter">Developer documentation</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox">
+  <form class="search" action="../../search/" method="get">
+    <div class="input-group">
+      <input type="text" name="q" placeholder="Search" />
+      <button type="submit">Go</button>
+    </div>
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+    </div>
+  </aside>
+  <div class="t-content">
+    <div class="t-body yue">
+      
+
+
+  <span class="target" id="module-exoplanet"></span><div class="section" id="api-documentation">
+<span id="api"></span><h1>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="orbits">
+<h2>Orbits<a class="headerlink" href="#orbits" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="light-curve-models">
+<h2>Light curve models<a class="headerlink" href="#light-curve-models" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="scalable-gaussian-processes">
+<h2>Scalable Gaussian processes<a class="headerlink" href="#scalable-gaussian-processes" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="exoplanet.gp.GP">
+<em class="property">class </em><code class="sig-prename descclassname">exoplanet.gp.</code><code class="sig-name descname">GP</code><span class="sig-paren">(</span><em class="sig-param">kernel</em>, <em class="sig-param">x</em>, <em class="sig-param">diag=None</em>, <em class="sig-param">mean=&lt;exoplanet.gp.means.Zero object&gt;</em>, <em class="sig-param">J=-1</em>, <em class="sig-param">model=None</em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.gp.GP" title="Permalink to this definition">¶</a></dt>
+<dd><p>The interface for computing Gaussian Process models with celerite</p>
+<p>This class implements the method described in <a class="reference external" href="https://arxiv.org/abs/1703.09710">Foreman-Mackey et al. (2017)</a> and <a class="reference external" href="https://arxiv.org/abs/1801.10156">Foreman-Mackey (2018)</a> for scalable evaluation of Gaussian
+Process (GP) models in 1D.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input coordinates <code class="docutils literal notranslate"><span class="pre">x</span></code> must be sorted in ascending order,
+but this is not checked in the code. If the values are not sorted, the
+behavior of the algorithm is undefined.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>kernel</strong> – A <a class="reference internal" href="#exoplanet.gp.terms.Term" title="exoplanet.gp.terms.Term"><code class="xref py py-class docutils literal notranslate"><span class="pre">exoplanet.gp.terms.Term</span></code></a> object the specifies the
+GP kernel.</p></li>
+<li><p><strong>x</strong> – The input coordinates. This should be a 1D array and the elements
+must be sorted. Otherwise the results are undefined.</p></li>
+<li><p><strong>diag</strong> (<em>Optional</em>) – The extra diagonal to add to the covariance matrix.
+This should have the same length as <code class="docutils literal notranslate"><span class="pre">x</span></code> and correspond to the
+excess <em>variance</em> for each data point. <strong>Note:</strong> this is different
+from the usage in the <code class="docutils literal notranslate"><span class="pre">celerite</span></code> package where the standard
+deviation (instead of variance) is provided.</p></li>
+<li><p><strong>mean</strong> (<em>Optional</em>) – The mean function for the GP. This can be a constant
+scalar value or a callable that will be called with a single, one
+dimensional tensor argument specifying the input coordinates where
+the mean should be evaluated.</p></li>
+<li><p><strong>J</strong> (<em>Optional</em>) – <p>The width of the system. This is the <code class="docutils literal notranslate"><span class="pre">J</span></code> parameter
+from <a class="reference external" href="https://arxiv.org/abs/1801.10156">Foreman-Mackey (2018)</a>
+(not the original paper) so a real term contributes <code class="docutils literal notranslate"><span class="pre">J</span> <span class="pre">+=</span> <span class="pre">1</span></code> and
+a complex term contributes <code class="docutils literal notranslate"><span class="pre">J</span> <span class="pre">+=</span> <span class="pre">2</span></code>. If you know this value in
+advance, you can provide it. Otherwise, the code will try to work
+it out.</p>
+</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="exoplanet.gp.GP.marginal">
+<code class="sig-name descname">marginal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.gp.GP.marginal" title="Permalink to this definition">¶</a></dt>
+<dd><p>The marginal likelihood</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – The name of the node</p></li>
+<li><p><strong>observed</strong> – The observed data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">pymc3.DensityDist</span></code> with the likelihood</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="exoplanet.gp.GP.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">return_var</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">return_cov</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">predict_mean</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">_fast_mean</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.gp.GP.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the conditional distribution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>optional</em>) – The independent coordinates where the prediction
+should be evaluated. If not provided, this will be evaluated
+at the observations.</p></li>
+<li><p><strong>return_var</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Return the variance of the conditional
+distribution.</p></li>
+<li><p><strong>return_cov</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Return the full covariance matrix of
+the conditional distribution.</p></li>
+<li><p><strong>predict_mean</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Include the mean function in the
+prediction.</p></li>
+<li><p><strong>kernel</strong> (<em>optional</em>) – If provided, compute the conditional
+distribution using a different kernel. This is generally used
+to separate the contributions from different model components.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><strong>RuntimeError</strong></a> – if <code class="xref py py-func docutils literal notranslate"><span class="pre">GP.condition()</span></code> or <a class="reference internal" href="#exoplanet.gp.GP.marginal" title="exoplanet.gp.GP.marginal"><code class="xref py py-func docutils literal notranslate"><span class="pre">marginal()</span></code></a> are not
+    called first.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="exoplanet.gp.terms.Term">
+<em class="property">class </em><code class="sig-prename descclassname">exoplanet.gp.terms.</code><code class="sig-name descname">Term</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.gp.terms.Term" title="Permalink to this definition">¶</a></dt>
+<dd><p>The abstract base “term” that is the superclass of all other terms</p>
+<p>Subclasses should overload the <code class="xref py py-func docutils literal notranslate"><span class="pre">terms.Term.get_real_coefficients()</span></code>
+and <code class="xref py py-func docutils literal notranslate"><span class="pre">terms.Term.get_complex_coefficients()</span></code> methods.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="exoplanet.gp.terms.RealTerm">
+<em class="property">class </em><code class="sig-prename descclassname">exoplanet.gp.terms.</code><code class="sig-name descname">RealTerm</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.gp.terms.RealTerm" title="Permalink to this definition">¶</a></dt>
+<dd><p>The simplest celerite term</p>
+<p>This term has the form</p>
+<div class="math notranslate nohighlight">
+\[k(\tau) = a_j\,e^{-c_j\,\tau}\]</div>
+<p>with the parameters <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">c</span></code>.</p>
+<p>Strictly speaking, for a sum of terms, the parameter <code class="docutils literal notranslate"><span class="pre">a</span></code> could be
+allowed to go negative but since it is somewhat subtle to ensure positive
+definiteness, we recommend keeping both parameters strictly positive.
+Advanced users can build a custom term that has negative coefficients but
+care should be taken to ensure positivity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong><strong> or </strong><strong>log_a</strong> (<em>tensor</em>) – The amplitude of the term.</p></li>
+<li><p><strong>c</strong><strong> or </strong><strong>log_c</strong> (<em>tensor</em>) – The exponent of the term.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="exoplanet.gp.terms.ComplexTerm">
+<em class="property">class </em><code class="sig-prename descclassname">exoplanet.gp.terms.</code><code class="sig-name descname">ComplexTerm</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.gp.terms.ComplexTerm" title="Permalink to this definition">¶</a></dt>
+<dd><p>A general celerite term</p>
+<p>This term has the form</p>
+<div class="math notranslate nohighlight">
+\[k(\tau) = \frac{1}{2}\,\left[(a_j + b_j)\,e^{-(c_j+d_j)\,\tau}
+ + (a_j - b_j)\,e^{-(c_j-d_j)\,\tau}\right]\]</div>
+<p>with the parameters <code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, and <code class="docutils literal notranslate"><span class="pre">d</span></code>.</p>
+<p>This term will only correspond to a positive definite kernel (on its own)
+if <span class="math notranslate nohighlight">\(a_j\,c_j \ge b_j\,d_j\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong><strong> or </strong><strong>log_a</strong> (<em>tensor</em>) – The real part of amplitude.</p></li>
+<li><p><strong>b</strong><strong> or </strong><strong>log_b</strong> (<em>tensor</em>) – The imaginary part of amplitude.</p></li>
+<li><p><strong>c</strong><strong> or </strong><strong>log_c</strong> (<em>tensor</em>) – The real part of the exponent.</p></li>
+<li><p><strong>d</strong><strong> or </strong><strong>log_d</strong> (<em>tensor</em>) – The imaginary part of exponent.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="exoplanet.gp.terms.SHOTerm">
+<em class="property">class </em><code class="sig-prename descclassname">exoplanet.gp.terms.</code><code class="sig-name descname">SHOTerm</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.gp.terms.SHOTerm" title="Permalink to this definition">¶</a></dt>
+<dd><p>A term representing a stochastically-driven, damped harmonic oscillator</p>
+<p>The PSD of this term is</p>
+<div class="math notranslate nohighlight">
+\[S(\omega) = \sqrt{\frac{2}{\pi}} \frac{S_0\,\omega_0^4}
+{(\omega^2-{\omega_0}^2)^2 + {\omega_0}^2\,\omega^2/Q^2}\]</div>
+<p>with the parameters <code class="docutils literal notranslate"><span class="pre">S0</span></code>, <code class="docutils literal notranslate"><span class="pre">Q</span></code>, and <code class="docutils literal notranslate"><span class="pre">w0</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S0</strong><strong> or </strong><strong>log_S0</strong> (<em>tensor</em>) – The parameter <span class="math notranslate nohighlight">\(S_0\)</span>.</p></li>
+<li><p><strong>Q</strong><strong> or </strong><strong>log_Q</strong> (<em>tensor</em>) – The parameter <span class="math notranslate nohighlight">\(Q\)</span>.</p></li>
+<li><p><strong>w0</strong><strong> or </strong><strong>log_w0</strong> (<em>tensor</em>) – The parameter <span class="math notranslate nohighlight">\(\omega_0\)</span>.</p></li>
+<li><p><strong>Sw4</strong><strong> or </strong><strong>log_Sw4</strong> (<em>tensor</em>) – It can sometimes be more efficient to
+parameterize the amplitude of a SHO kernel using
+<span class="math notranslate nohighlight">\(S_0\,{\omega_0}^4\)</span> instead of <span class="math notranslate nohighlight">\(S_0\)</span> directly since
+<span class="math notranslate nohighlight">\(S_0\)</span> and <span class="math notranslate nohighlight">\(\omega_0\)</span> are strongly correlated. If
+provided, <code class="docutils literal notranslate"><span class="pre">S0</span></code> will be computed from <code class="docutils literal notranslate"><span class="pre">Sw4</span></code> and <code class="docutils literal notranslate"><span class="pre">w0</span></code>.</p></li>
+<li><p><strong>S_tot</strong><strong> or </strong><strong>log_S_tot</strong> (<em>tensor</em>) – Another useful parameterization is
+<span class="math notranslate nohighlight">\(S_tot = S_0\,\omega_0\,Q\)</span>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="exoplanet.gp.terms.Matern32Term">
+<em class="property">class </em><code class="sig-prename descclassname">exoplanet.gp.terms.</code><code class="sig-name descname">Matern32Term</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.gp.terms.Matern32Term" title="Permalink to this definition">¶</a></dt>
+<dd><p>A term that approximates a Matern-3/2 function</p>
+<p>This term is defined as</p>
+<div class="math notranslate nohighlight">
+\[k(\tau) = \sigma^2\,\left[
+    \left(1+1/\epsilon\right)\,e^{-(1-\epsilon)\sqrt{3}\,\tau/\rho}
+    \left(1-1/\epsilon\right)\,e^{-(1+\epsilon)\sqrt{3}\,\tau/\rho}
+\right]\]</div>
+<p>with the parameters <code class="docutils literal notranslate"><span class="pre">sigma</span></code> and <code class="docutils literal notranslate"><span class="pre">rho</span></code>. The parameter <code class="docutils literal notranslate"><span class="pre">eps</span></code>
+controls the quality of the approximation since, in the limit
+<span class="math notranslate nohighlight">\(\epsilon \to 0\)</span> this becomes the Matern-3/2 function</p>
+<div class="math notranslate nohighlight">
+\[\lim_{\epsilon \to 0} k(\tau) = \sigma^2\,\left(1+
+\frac{\sqrt{3}\,\tau}{\rho}\right)\,
+\exp\left(-\frac{\sqrt{3}\,\tau}{\rho}\right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sigma</strong><strong> or </strong><strong>log_sigma</strong> (<em>tensor</em>) – The parameter <span class="math notranslate nohighlight">\(\sigma\)</span>.</p></li>
+<li><p><strong>rho</strong><strong> or </strong><strong>log_rho</strong> (<em>tensor</em>) – The parameter <span class="math notranslate nohighlight">\(\rho\)</span>.</p></li>
+<li><p><strong>eps</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>]</em>) – The value of the parameter <span class="math notranslate nohighlight">\(\epsilon\)</span>.
+(default: <cite>0.01</cite>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="exoplanet.gp.terms.RotationTerm">
+<em class="property">class </em><code class="sig-prename descclassname">exoplanet.gp.terms.</code><code class="sig-name descname">RotationTerm</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.gp.terms.RotationTerm" title="Permalink to this definition">¶</a></dt>
+<dd><p>A mixture of two SHO terms that can be used to model stellar rotation</p>
+<p>This term has two modes in Fourier space: one at <code class="docutils literal notranslate"><span class="pre">period</span></code> and one at
+<code class="docutils literal notranslate"><span class="pre">0.5</span> <span class="pre">*</span> <span class="pre">period</span></code>. This can be a good descriptive model for a wide range of
+stochastic variability in stellar time series from rotation to pulsations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>amp</strong><strong> or </strong><strong>log_amp</strong> (<em>tensor</em>) – The amplitude of the variability.</p></li>
+<li><p><strong>period</strong><strong> or </strong><strong>log_period</strong> (<em>tensor</em>) – The primary period of variability.</p></li>
+<li><p><strong>Q0</strong><strong> or </strong><strong>log_Q0</strong> (<em>tensor</em>) – The quality factor (or really the quality factor
+minus one half) for the secondary oscillation.</p></li>
+<li><p><strong>deltaQ</strong><strong> or </strong><strong>log_deltaQ</strong> (<em>tensor</em>) – The difference between the quality factors
+of the first and the second modes. This parameterization (if
+<code class="docutils literal notranslate"><span class="pre">deltaQ</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>) ensures that the primary mode alway has higher
+quality.</p></li>
+<li><p><strong>mix</strong> – The fractional amplitude of the secondary mode compared to the
+primary. This should probably always be <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">mix</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="estimators">
+<h2>Estimators<a class="headerlink" href="#estimators" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="distributions">
+<h2>Distributions<a class="headerlink" href="#distributions" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="exoplanet.distributions.get_log_abs_det_jacobian">
+<code class="sig-prename descclassname">exoplanet.distributions.</code><code class="sig-name descname">get_log_abs_det_jacobian</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_vars</span></em>, <em class="sig-param"><span class="n">out_vars</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.distributions.get_log_abs_det_jacobian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the log absolute determinant of the Jacobian between parameter sets</p>
+<p>This returns a Theano tensor representation of
+<span class="math notranslate nohighlight">\(\log \left|\mathrm{det} J \right|\)</span> where the elements of <span class="math notranslate nohighlight">\(J\)</span>
+are <span class="math notranslate nohighlight">\(J_{nm} = \partial y_n / \partial x_m\)</span>. Here, <span class="math notranslate nohighlight">\(y_n\)</span> and
+<span class="math notranslate nohighlight">\(x_m\)</span> should be Theano tensors or PyMC3 variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_vars</strong> – A list of input parameters <span class="math notranslate nohighlight">\(x_m\)</span></p></li>
+<li><p><strong>out_vars</strong> – A list of output parameters <span class="math notranslate nohighlight">\(y_n\)</span></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="exoplanet.distributions.estimate_inverse_gamma_parameters">
+<code class="sig-prename descclassname">exoplanet.distributions.</code><code class="sig-name descname">estimate_inverse_gamma_parameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lower</span></em>, <em class="sig-param"><span class="n">upper</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">0.01</span></em>, <em class="sig-param"><span class="n">initial</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.distributions.estimate_inverse_gamma_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate an inverse Gamma with desired tail probabilities</p>
+<p>This method numerically solves for the parameters of an inverse Gamma
+distribution where the tails have a given probability. In other words
+<span class="math notranslate nohighlight">\(P(x &lt; \mathrm{lower}) = \mathrm{target}\)</span> and similarly for the
+upper bound. More information can be found in <a class="reference external" href="https://betanalpha.github.io/assets/case_studies/gp_part3/part3.html">part 4 of this blog post</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lower</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The location of the lower tail</p></li>
+<li><p><strong>upper</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The location of the upper tail</p></li>
+<li><p><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><em>optional</em>) – The desired tail probability</p></li>
+<li><p><strong>initial</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – An initial guess for the parameters
+<code class="docutils literal notranslate"><span class="pre">alpha</span></code> and <code class="docutils literal notranslate"><span class="pre">beta</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><strong>RuntimeError</strong></a> – If the solver does not converge.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dictionary with the keys <code class="docutils literal notranslate"><span class="pre">alpha</span></code> and <code class="docutils literal notranslate"><span class="pre">beta</span></code> for the
+parameters of the distribution.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="section" id="base-distributions">
+<h3>Base distributions<a class="headerlink" href="#base-distributions" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="exoplanet.distributions.UnitUniform">
+<em class="property">class </em><code class="sig-prename descclassname">exoplanet.distributions.</code><code class="sig-name descname">UnitUniform</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.distributions.UnitUniform" title="Permalink to this definition">¶</a></dt>
+<dd><p>A uniform distribution between zero and one</p>
+<p>This can sometimes get better performance than <code class="docutils literal notranslate"><span class="pre">pm.Uniform.dist(0,</span> <span class="pre">1)</span></code>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="exoplanet.distributions.UnitVector">
+<em class="property">class </em><code class="sig-prename descclassname">exoplanet.distributions.</code><code class="sig-name descname">UnitVector</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.distributions.UnitVector" title="Permalink to this definition">¶</a></dt>
+<dd><p>A vector where the sum of squares is fixed to unity</p>
+<p>For a multidimensional shape, the normalization is performed along the
+last dimension.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="exoplanet.distributions.UnitDisk">
+<em class="property">class </em><code class="sig-prename descclassname">exoplanet.distributions.</code><code class="sig-name descname">UnitDisk</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.distributions.UnitDisk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Two dimensional parameters constrianed to live within the unit disk</p>
+<p>This distribution is constrained such that the sum of squares along the
+zeroth axis will always be less than one. For example, in this code block:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">theano.tensor</span> <span class="k">as</span> <span class="nn">tt</span>
+<span class="n">disk</span> <span class="o">=</span> <span class="n">UnitDisk</span><span class="p">(</span><span class="s2">&quot;disk&quot;</span><span class="p">)</span>
+<span class="n">radius</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">disk</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>the tensor <code class="docutils literal notranslate"><span class="pre">radius</span></code> will always have a value in the range <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1)</span></code>.</p>
+<p>Note that the shape of this distribution must be two in the zeroth axis.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="exoplanet.distributions.Angle">
+<em class="property">class </em><code class="sig-prename descclassname">exoplanet.distributions.</code><code class="sig-name descname">Angle</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.distributions.Angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>An angle constrained to be in the range -pi to pi</p>
+<p>The actual sampling is performed in the two dimensional vector space
+<code class="docutils literal notranslate"><span class="pre">(sin(theta),</span> <span class="pre">cos(theta))</span></code> so that the sampler doesn’t see a
+discontinuity at pi.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="exoplanet.distributions.Periodic">
+<em class="property">class </em><code class="sig-prename descclassname">exoplanet.distributions.</code><code class="sig-name descname">Periodic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lower</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">upper</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.distributions.Periodic" title="Permalink to this definition">¶</a></dt>
+<dd><p>An periodic parameter in a given range</p>
+<p>Like the <a class="reference internal" href="#exoplanet.distributions.Angle" title="exoplanet.distributions.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a> distribution, the actual sampling is performed in
+a two dimensional vector space <code class="docutils literal notranslate"><span class="pre">(sin(theta),</span> <span class="pre">cos(theta))</span></code> and then
+transformed into the range <code class="docutils literal notranslate"><span class="pre">[lower,</span> <span class="pre">upper)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lower</strong> – The lower bound on the range.</p></li>
+<li><p><strong>upper</strong> – The upper bound on the range.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="physical-distributions">
+<h3>Physical distributions<a class="headerlink" href="#physical-distributions" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="exoplanet.distributions.QuadLimbDark">
+<em class="property">class </em><code class="sig-prename descclassname">exoplanet.distributions.</code><code class="sig-name descname">QuadLimbDark</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.distributions.QuadLimbDark" title="Permalink to this definition">¶</a></dt>
+<dd><p>An uninformative prior for quadratic limb darkening parameters</p>
+<p>This is an implementation of the <a class="reference external" href="https://arxiv.org/abs/1308.0009">Kipping (2013)</a> reparameterization of the
+two-parameter limb darkening model to allow for efficient and
+uninformative sampling.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="exoplanet.distributions.ImpactParameter">
+<em class="property">class </em><code class="sig-prename descclassname">exoplanet.distributions.</code><code class="sig-name descname">ImpactParameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ror</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.distributions.ImpactParameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>The impact parameter distribution for a transiting planet</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ror</strong> – A scalar, tensor, or PyMC3 distribution representing the radius
+ratio between the planet and star. Conditioned on a value of
+<code class="docutils literal notranslate"><span class="pre">ror</span></code>, this will be uniformly distributed between <code class="docutils literal notranslate"><span class="pre">0</span></code> and
+<code class="docutils literal notranslate"><span class="pre">1+ror</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="eccentricity-distributions">
+<h3>Eccentricity distributions<a class="headerlink" href="#eccentricity-distributions" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="exoplanet.distributions.eccentricity.kipping13">
+<code class="sig-prename descclassname">exoplanet.distributions.eccentricity.</code><code class="sig-name descname">kipping13</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">fixed</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">long</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.distributions.eccentricity.kipping13" title="Permalink to this definition">¶</a></dt>
+<dd><p>The beta eccentricity distribution fit by Kipping (2013)</p>
+<p>The beta distribution parameters fit by <a class="reference external" href="https://arxiv.org/abs/1306.4982">Kipping (2013b)</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the eccentricity variable.</p></li>
+<li><p><strong>fixed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, use the posterior median
+hyperparameters. Otherwise, marginalize over the parameters.</p></li>
+<li><p><strong>long</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, use the parameters for the long
+period fit. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, use the parameters for the short period
+fit. If not given, the parameters fit using the full dataset are
+used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The eccentricity distribution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="exoplanet.distributions.eccentricity.vaneylen19">
+<code class="sig-prename descclassname">exoplanet.distributions.eccentricity.</code><code class="sig-name descname">vaneylen19</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">fixed</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">multi</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.distributions.eccentricity.vaneylen19" title="Permalink to this definition">¶</a></dt>
+<dd><p>The eccentricity distribution for small planets</p>
+<p>The mixture distribution fit by <a class="reference external" href="https://arxiv.org/abs/1807.00549">Van Eylen et al. (2019)</a> to a population of well-characterized
+small transiting planets observed by Kepler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the eccentricity variable.</p></li>
+<li><p><strong>fixed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, use the posterior median
+hyperparameters. Otherwise, marginalize over the parameters.</p></li>
+<li><p><strong>multi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, use the distribution for systems
+with multiple transiting planets. If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), use the
+distribution for systems with only one detected transiting planet.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The eccentricity distribution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="utilities">
+<h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="units">
+<h2>Units<a class="headerlink" href="#units" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="exoplanet.units.with_unit">
+<code class="sig-prename descclassname">exoplanet.units.</code><code class="sig-name descname">with_unit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">unit</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.units.with_unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorate a Theano tensor with Astropy units</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – The Theano tensor</p></li>
+<li><p><strong>unit</strong> (<em>astropy.Unit</em>) – The units for this object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.8)"><strong>TypeError</strong></a> – If the tensor already has units</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="exoplanet.units.has_unit">
+<code class="sig-prename descclassname">exoplanet.units.</code><code class="sig-name descname">has_unit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.units.has_unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does an object have units as defined by exoplanet?</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="exoplanet.units.to_unit">
+<code class="sig-prename descclassname">exoplanet.units.</code><code class="sig-name descname">to_unit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">target</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.units.to_unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a Theano tensor with units to a target set of units</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – The Theano tensor</p></li>
+<li><p><strong>target</strong> (<em>astropy.Unit</em>) – The target units</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Theano tensor in the right units</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="citations">
+<h2>Citations<a class="headerlink" href="#citations" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="exoplanet.citations.get_citations_for_model">
+<code class="sig-prename descclassname">exoplanet.citations.</code><code class="sig-name descname">get_citations_for_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">width</span><span class="o">=</span><span class="default_value">79</span></em><span class="sig-paren">)</span><a class="headerlink" href="#exoplanet.citations.get_citations_for_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the citations for the components used an exoplanet PyMC3</p>
+<p>Returns: The acknowledgement text for exoplanet and its dependencies and a
+string containing the BibTeX entries for the citations in the
+acknowledgement.</p>
+</dd></dl>
+
+</div>
+</div>
+
+  <div class="t-pagination clearfix">
+    <span>
+      ← <a href="../../tutorials/citation/" title="Citing exoplanet &amp; its dependencies">Citing exoplanet &amp; its...</a>
+    </span>
+    <span style="float:right">
+      <a href="../dev/" title="Developer documentation">Developer documentation</a> →
+    </span>
+  </div>
+
+
+    </div>
+<footer class="t-foot">
+    &copy; Copyright 2018, 2019, 2020, Dan Foreman-Mackey.
+    <br>
+    A <a href="https://typlog.com/">typlog</a> <a href="https://github.com/typlog/sphinx-typlog-theme">sphinx theme</a>,
+    designed by <a href="https://lepture.com/">Hsiaoming Yang</a>.
+</footer>
+
+<script id="versions-template" type="x-tmpl-mustache">
+<div class="versions">
+    <div class="current-version">
+        v0.3.1
+        <span class="fas fa-caret-down"></span>
+    </div>
+    <dl class="versions-dropdown">
+        {{#versions}}
+        <dd><a href="https://docs.exoplanet.codes/en/{{.}}/user/api">{{.}}</a></dd>
+        {{/versions}}
+    </dl>
+</div>
+</script>
+
+  </div>
+  <script>$(function(){$(".t-head_menu").on("click",function(){$("body").addClass("_expand")});$(".t-body").on("click",function(){$("body").removeClass("_expand")});$(".t-sidebar_close").on("click",function(){$("body").removeClass("_expand")});$("a.footnote-reference").on("click",function(e){e.preventDefault();var id=$(this).attr("href");var html=$(id).find("td.label + td").html();var w=Math.max(document.documentElement.clientWidth,window.innerWidth||0);var style="top:"+e.pageY+"px;";if(w>560){style+="width:480px;";if(e.pageX>240&&e.pageX+240<w){style+="left:"+(e.pageX-240)+"px;"}else if(e.pageX<=240){style+="left:20px;"}else{style+="right:20px;"}}showFootnote(html,style)});function showFootnote(html,style){var CONTENT_ID="typlog-footnote-content";var content=document.getElementById(CONTENT_ID);if(!content){content=document.createElement("div");content.id=CONTENT_ID;$(".t-body").append(content)}var MASK_ID="typlog-footnote-mask";var mask=document.getElementById(MASK_ID);if(!mask){mask=document.createElement("div");mask.id=MASK_ID;document.body.appendChild(mask);mask.addEventListener("click",function(){content.className="";mask.className=""})}content.innerHTML=html;content.setAttribute("style",style);content.className="_active";mask.className="_active"}function fetchGitHubRepo(repo){var url="https://api.github.com/repos/"+repo;$.getJSON(url,function(data){var counts=[+new Date,data.stargazers_count,data.forks_count];localStorage.setItem("gh:"+repo,JSON.stringify(counts));updateGitHubStats(counts[1],counts[2])})}function updateGitHubStats(stars,forks){$(".github_stars strong").text(stars);$(".github_forks strong").text(forks)}function initGitHub(url){if(!url){return}var repo=url.replace("https://github.com/","");var cache=localStorage.getItem("gh:"+repo);if(cache){try{var counts=JSON.parse(cache);updateGitHubStats(counts[1],counts[2]);var delta=new Date-counts[0];if(delta<0||delta>9e5){fetchGitHubRepo(repo)}}catch(error){fetchGitHubRepo(repo)}}else{fetchGitHubRepo(repo)}}initGitHub($(".github").attr("href"))});</script>
+</body>
+</html>
